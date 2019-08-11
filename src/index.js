@@ -147,14 +147,14 @@ function createLoadableComponent(loadFn, options) {
       loadable: PropTypes.shape({
         report: PropTypes.func.isRequired,
         reportResolved: PropTypes.func
-      }),
+      })
     };
 
     static preload() {
       return init();
     }
 
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
       this._mounted = true;
 
       if (this.context.loadable && Array.isArray(opts.modules)) {
@@ -163,17 +163,19 @@ function createLoadableComponent(loadFn, options) {
         });
       }
 
-      if (this.context.loadable &&
-        typeof this.context.loadable.reportResolved === 'function' &&
-        typeof opts.webpack === 'function') {
-        this.context.loadable.reportResolved(opts.webpack())
+      if (
+        this.context.loadable &&
+        typeof this.context.loadable.reportResolved === "function" &&
+        typeof opts.webpack === "function"
+      ) {
+        this.context.loadable.reportResolved(opts.webpack());
       }
 
       if (!res.loading) {
         return;
       }
 
-      if (typeof opts.delay === 'number') {
+      if (typeof opts.delay === "number") {
         if (opts.delay === 0) {
           this.setState({ pastDelay: true });
         } else {
@@ -183,7 +185,7 @@ function createLoadableComponent(loadFn, options) {
         }
       }
 
-      if (typeof opts.timeout === 'number') {
+      if (typeof opts.timeout === "number") {
         this._timeout = setTimeout(() => {
           this.setState({ timedOut: true });
         }, opts.timeout);
@@ -203,11 +205,13 @@ function createLoadableComponent(loadFn, options) {
         this._clearTimeouts();
       };
 
-      res.promise.then(() => {
-        update();
-      }).catch(err => {
-        update();
-      });
+      res.promise
+        .then(() => {
+          update();
+        })
+        .catch(err => {
+          update();
+        });
     }
 
     componentWillUnmount() {
